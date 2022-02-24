@@ -13,13 +13,13 @@ def call(){
             ARGOCDIP=credentials('argocdip')
         }
         stages {
-            stage{
+            stage('Checkout SMC') {
                 checkout
             }
-            stage{
+            stage('Build') {
                 maven
             }
-            stage{
+            stage('Build with Docker') {
                 dockerBuild
             }
         }

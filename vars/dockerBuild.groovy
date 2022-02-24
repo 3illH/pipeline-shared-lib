@@ -1,5 +1,5 @@
 def call(){
-    stage('Build with Docker') {
+    
         steps {
             container('docker') {
                 script{
@@ -8,5 +8,4 @@ def call(){
                 }
             }
         }
-    }
 }

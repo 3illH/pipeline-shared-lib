@@ -1,5 +1,5 @@
 def call() {
-    stage('Build') {
+
         steps {
             container('maven') {
                 script {
@@ -8,5 +8,5 @@ def call() {
                 }
             }
         }
-    }
+    
 }
