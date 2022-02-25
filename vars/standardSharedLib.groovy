@@ -1,5 +1,6 @@
 def call(){
     def FAILED_STAGE
+    def utils = new org.shared.utils.Checkout(this)
     pipeline {
         agent {
             kubernetes {
@@ -15,14 +16,14 @@ def call(){
         }
         stages {
             stage('Checkout SMC') {
-                def utils = new org.shared.utils.Checkout(this)
+                
                 utils.checkout 'https://github.com/3illH/gs-rest-service-pipeline'
             }
             stage('Build') {
-                maven
+                
             }
             stage('Build with Docker') {
-                dockerBuild
+                
             }
         }
     }
