@@ -22,7 +22,6 @@ def call(){
                 }
                 }
             }
-            }
             stage('Build') {
                 
             }
