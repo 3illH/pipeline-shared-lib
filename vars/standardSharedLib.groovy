@@ -22,12 +22,12 @@ def call(){
                 }
                 }
             }
-            stage('Build') {
+            // stage('Build') {
                 
-            }
-            stage('Build with Docker') {
+            // }
+            // stage('Build with Docker') {
                 
-            }
+            // }
         }
     }
 }
