@@ -12,7 +12,11 @@ def call(Map config){
         ARGOCDIP=credentials('argocdip')
     }
     stages {
-        checkoutStage();
+        stage('Checkout') {
+            steps{
+                checkoutStage()
+            }
+        }
         // if(config.steps.contains("build")){
         //     stage('Build') {
         //         steps {
