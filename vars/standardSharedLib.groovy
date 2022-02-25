@@ -14,7 +14,7 @@ def call(Map config){
     stages {
         stage('Checkout') {
             steps{
-                checkoutStage(config.steps)
+                checkoutStage(config)
             }
         }
         // if(config.steps.contains("build")){
