@@ -15,10 +15,13 @@ def call(){
         }
         stages {
             stage('Checkout SMC') {
+                steps{
                 script{
                     def utils = new org.shared.utils.Checkout(this)
                     utils.checkout 'https://github.com/3illH/gs-rest-service-pipeline'
                 }
+                }
+            }
             }
             stage('Build') {
                 
