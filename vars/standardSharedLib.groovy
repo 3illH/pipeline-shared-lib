@@ -121,4 +121,5 @@ def call(Map config){
     //         recordIssues enabledForFailure: true, tool: owaspDependencyCheck(pattern: 'target/dependency-check-report.json')
     //     }
     // }
+    }
 }
