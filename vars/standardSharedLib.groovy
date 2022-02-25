@@ -1,6 +1,3 @@
-@Library('utils') import org.shared.utils.Checkout
-def utils = new Checkout(this)
-
 def call(){
     def FAILED_STAGE
     pipeline {
@@ -17,6 +14,7 @@ def call(){
         }
         stages {
             stage('Checkout SMC') {
+                def utils = new org.shared.utils.Checkout(this)
                 utils.checkout 'https://github.com/3illH/gs-rest-service-pipeline'
             }
             stage('Build') {
