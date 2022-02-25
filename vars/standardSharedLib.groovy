@@ -7,6 +7,7 @@ def call(){
             }
 
         }
+        options { buildDiscarder(logRotator(numToKeepStr: '1')) }
         environment {
             MAVEN_OPTS = "-Dmaven.repo.local=/m2"
             DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
