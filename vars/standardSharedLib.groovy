@@ -17,7 +17,7 @@ def call(Map config){
                 checkoutStage(config)
             }
         }
-        if(config.steps.contains("build")){
+        // if(config.steps.contains("build")){
             stage('Build') {
                 steps {
                     container('maven') {
@@ -28,7 +28,7 @@ def call(Map config){
                     }
                 }
             }
-        }
+        // }
         // if(config.steps.contains("test")){
         //     stage('Test') {
         //         steps {
