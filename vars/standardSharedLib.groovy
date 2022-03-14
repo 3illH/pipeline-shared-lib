@@ -8,8 +8,8 @@ def call(Map config){
     }
     environment {
         MAVEN_OPTS = "-Dmaven.repo.local=/m2"
-        DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
-        ARGOCDIP=credentials('argocdip')
+        // DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
+        // ARGOCDIP=credentials('argocdip')
     }
     stages {
         stage('Checkout') {
@@ -17,18 +17,18 @@ def call(Map config){
                 checkoutStage(config)
             }
         }
-        // if(config.steps.contains("build")){
-        //     stage('Build') {
-        //         steps {
-        //             container('maven') {
-        //                 script {
-        //                     pom = readMavenPom file: "pom.xml";
-        //                     sh "mvn clean package -DskipTests"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        if(config.steps.contains("build")){
+            stage('Build') {
+                steps {
+                    container('maven') {
+                        script {
+                            pom = readMavenPom file: "pom.xml";
+                            sh "mvn clean package -DskipTests"
+                        }
+                    }
+                }
+            }
+        }
         // if(config.steps.contains("test")){
         //     stage('Test') {
         //         steps {
