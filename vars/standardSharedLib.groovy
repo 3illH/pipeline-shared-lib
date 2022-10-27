@@ -121,11 +121,11 @@ def call(Map config){
                 def url = "https://www.google.es/"
                 echo "Calling vJenkSYS to approve product on ${url}..."
                 def headers = []
-                // def headerRow = [:]
+                def headerRow = [:]
                 // headerRow.name = 'Authorization'
                 // headerRow.value = credentials
                 headers.add(headerRow)
-                def response = httpRequest(url: url, customHeaders: headers, httpMode: 'GET')
+                def response = httpRequest(url: url, httpMode: 'GET')
                 if (response.getStatus() >= 400) {
                     echo response.getContent()
                     error("Error approving on vJenSYS. Response code: ${response.getStatus()}")
