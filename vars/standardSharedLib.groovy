@@ -1,6 +1,13 @@
 def call(Map config){
     def FAILED_STAGE
     pipeline {
+    options {
+        withCredentials([string(credentialsId: 'jenkins-webhook', variable: 'webhook')]) {
+            office365ConnectorWebhooks([
+                [name: "jenkins-webhook", url: "$webhook", notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
+            ])
+        }
+    }
     agent {
         kubernetes {
             yamlFile 'build-pod.yaml'
