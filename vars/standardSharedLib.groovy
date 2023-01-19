@@ -1,11 +1,7 @@
 def call(Map config){
     def FAILED_STAGE
     pipeline {
-    options {
-        office365ConnectorWebhooks([
-            [name: "jenkins-webhook", url: credentials('jenkins-webhook'), notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
-        ])
-    }
+
     agent {
         kubernetes {
             yamlFile 'build-pod.yaml'
@@ -15,6 +11,12 @@ def call(Map config){
         MAVEN_OPTS = "-Dmaven.repo.local=/m2"
         // DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
         // ARGOCDIP=credentials('argocdip')
+        WEBHOOK = credentials('jenkins-webhook')
+    }
+    options {
+        office365ConnectorWebhooks([
+            [name: "jenkins-webhook", url: '$WEBHOOK', notifyBackToNormal: true, notifyFailure: true, notifyRepeatedFailure: true, notifySuccess: true, notifyAborted: true]
+        ])
     }
     stages {
         stage('Checkout') {
