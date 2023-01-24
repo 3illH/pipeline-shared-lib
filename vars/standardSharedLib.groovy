@@ -105,9 +105,11 @@ def call(Map config){
             when { expression { return config.steps.contains("dockerPush") } }
             steps {
                 container('docker') {
-                    script{
-                        sh 'echo $HARBOR_CREDENTIALS_PSW | docker login harbor-portal.harbor.svc.cluster.local -u $HARBOR_CREDENTIALS_USR --password-stdin'
-                        sh "docker push ${dockerImageName}"
+                    withCredentials([usernamePassword(credentialsId: 'harborCredentials', passwordVariable: 'harborPSW', usernameVariable: 'harborUser')]) {
+                        script{
+                            sh 'docker login harbor-portal.harbor.svc.cluster.local -u $harborUser --password $harborPSW'
+                            sh "docker push ${dockerImageName}"
+                        }
                     }
                 }
             }
