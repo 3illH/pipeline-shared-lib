@@ -10,6 +10,7 @@ def call(Map config){
     environment {
         MAVEN_OPTS = "-Dmaven.repo.local=/m2"
         // DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
+        HARBOR_CREDENTIALS=credentials('harborCredentials')
         // ARGOCDIP=credentials('argocdip')
         WEBHOOK = credentials('jenkins-webhook')
     }
@@ -66,7 +67,7 @@ def call(Map config){
             steps {
                 container('docker') {
                     script{
-                        dockerImageName = "3ill/gs-rest-service:${pom.version}"
+                        dockerImageName = "harbor-portal.harbor.svc.cluster.local/harbor/gs-rest-service:${pom.version}"
                         dockerImage = docker.build("${dockerImageName}", ".")
                     }
                 }
@@ -80,7 +81,7 @@ def call(Map config){
                 container('trivy') {
                     script {
                         FAILED_STAGE=env.STAGE_NAME
-                        sh "trivy image -f json -o trivy-results.json 3ill/gs-rest-service:0.0.2-SNAPSHOT"
+                        sh "trivy image -f json -o trivy-results.json harbor-portal.harbor.svc.cluster.local/harbor/gs-rest-service:${pom.version}"
                     }
                 }
             }
@@ -98,6 +99,19 @@ def call(Map config){
         //         }
         //     }
         // }
+
+        if(config.steps.contains("dockerPush")){
+            stage('Push with Docker to Harbor') {
+                steps {
+                    container('docker') {
+                        script{
+                            sh 'echo $HARBOR_CREDENTIALS_PSW | docker login harbor-portal.harbor.svc.cluster.local -u $HARBOR_CREDENTIALS_USR --password-stdin'
+                            sh "docker push ${dockerImageName}"
+                        }
+                    }
+                }
+            }
+        }
         // if(config.steps.contains("argocd")){
         //     stage('Deploy with ArgoCd') {
         //         steps {
