@@ -100,18 +100,19 @@ def call(Map config){
         //     }
         // }
 
-        if(config.steps.contains("dockerPush")){
-            stage('Push with Docker to Harbor') {
-                steps {
-                    container('docker') {
-                        script{
-                            sh 'echo $HARBOR_CREDENTIALS_PSW | docker login harbor-portal.harbor.svc.cluster.local -u $HARBOR_CREDENTIALS_USR --password-stdin'
-                            sh "docker push ${dockerImageName}"
-                        }
+
+        stage('Push with Docker to Harbor') {
+            when { expression { return config.steps.contains("dockerPush") } }
+            steps {
+                container('docker') {
+                    script{
+                        sh 'echo $HARBOR_CREDENTIALS_PSW | docker login harbor-portal.harbor.svc.cluster.local -u $HARBOR_CREDENTIALS_USR --password-stdin'
+                        sh "docker push ${dockerImageName}"
                     }
                 }
             }
         }
+
         // if(config.steps.contains("argocd")){
         //     stage('Deploy with ArgoCd') {
         //         steps {
