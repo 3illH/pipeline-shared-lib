@@ -67,7 +67,7 @@ def call(Map config){
             steps {
                 container('docker') {
                     script{
-                        dockerImageName = "harbor-portal.harbor.svc.cluster.local/harbor/gs-rest-service:${pom.version}"
+                        dockerImageName = "harbor-portal.harbor.svc.cluster.local/harbor/${config.projectName}:${pom.version}"
                         dockerImage = docker.build("${dockerImageName}", ".")
                     }
                 }
@@ -81,7 +81,7 @@ def call(Map config){
                 container('trivy') {
                     script {
                         FAILED_STAGE=env.STAGE_NAME
-                        sh "trivy image -f json -o trivy-results.json harbor-portal.harbor.svc.cluster.local/harbor/gs-rest-service:${pom.version}"
+                        sh "trivy image -f json -o trivy-results.json harbor-portal.harbor.svc.cluster.local/harbor/${config.projectName}:${pom.version}"
                     }
                 }
             }
