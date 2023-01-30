@@ -67,7 +67,7 @@ def call(Map config){
             steps {
                 container('docker') {
                     script{
-                        dockerImageName = "harbor-portal.harbor.svc.cluster.local/harbor/${config.projectName}:${pom.version}"
+                        dockerImageName = "core.harbor.domai/harbor/${config.projectName}:${pom.version}"
                         dockerImage = docker.build("${dockerImageName}", ".")
                     }
                 }
