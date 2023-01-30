@@ -107,7 +107,7 @@ def call(Map config){
                 container('docker') {
                     withCredentials([usernamePassword(credentialsId: 'harborCredentials', passwordVariable: 'harborPSW', usernameVariable: 'harborUser')]) {
                         script{
-                            sh 'docker login harbor-portal.harbor.svc.cluster.local -u $harborUser --password $harborPSW'
+                            sh 'docker login core.harbor.domain -u $harborUser --password $harborPSW'
                             sh "docker push ${dockerImageName}"
                         }
                     }
