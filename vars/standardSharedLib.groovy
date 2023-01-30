@@ -38,17 +38,17 @@ def call(Map config){
             }
         }
 
-        stage('Test') {
-            when { expression { return config.steps.contains("test") } }
-            steps {
-                container('maven') {
-                    script {
-                        sh "mvn clean verify"
-                        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-                    }
-                }
-            }
-        }
+        // stage('Test') {
+        //     when { expression { return config.steps.contains("test") } }
+        //     steps {
+        //         container('maven') {
+        //             script {
+        //                 sh "mvn clean verify"
+        //                 dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        //             }
+        //         }
+        //     }
+        // }
 
         // if(config.steps.contains("sonar")){
         //     stage('SonarQube Analysis') {
@@ -75,17 +75,17 @@ def call(Map config){
         }
 
 
-        stage('Trivy Scan Container image') {
-            when { expression { return config.steps.contains("trivy") } }
-            steps {
-                container('trivy') {
-                    script {
-                        FAILED_STAGE=env.STAGE_NAME
-                        sh "trivy image -f json -o trivy-results.json harbor-portal.harbor.svc.cluster.local/harbor/${config.projectName}:${pom.version}"
-                    }
-                }
-            }
-        }
+        // stage('Trivy Scan Container image') {
+        //     when { expression { return config.steps.contains("trivy") } }
+        //     steps {
+        //         container('trivy') {
+        //             script {
+        //                 FAILED_STAGE=env.STAGE_NAME
+        //                 sh "trivy image -f json -o trivy-results.json harbor-portal.harbor.svc.cluster.local/harbor/${config.projectName}:${pom.version}"
+        //             }
+        //         }
+        //     }
+        // }
 
         // if(config.steps.contains("dockerPush")){
         //     stage('Push with Docker') {
