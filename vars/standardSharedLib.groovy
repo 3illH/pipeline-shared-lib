@@ -133,22 +133,6 @@ def call(Map config){
         //     }
         // }
     }
-    stages {
-        stage('input') {
-        agent any
-        input {
-            message "Deploy in prod?"
-            ok "Submit"
-        }
-        steps {
-            echo "Good Morning, $FIRST_NAME"
-            sh '''
-            hostname
-            cat /etc/redhat-release
-            '''
-        }
-        }
-    }
     post {
         always {
             // recordIssues enabledForFailure: true, tool: trivy(pattern: 'trivy-results.json')
