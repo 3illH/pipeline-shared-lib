@@ -29,6 +29,7 @@ def call(Map config){
         stage('Build') {
             when { expression { return config.steps.contains("build") } }
             steps {
+                input message: 'Build'
                 container('maven') {
                     script {
                         pom = readMavenPom file: "pom.xml";
