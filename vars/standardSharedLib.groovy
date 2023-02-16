@@ -2,7 +2,11 @@ def call(Map config){
     def FAILED_STAGE
     pipeline {
 
-    agent none
+    agent {
+        kubernetes {
+            yamlFile 'build-pod.yaml'
+        }
+    }
 
     environment {
         MAVEN_OPTS = "-Dmaven.repo.local=/m2"
@@ -17,11 +21,7 @@ def call(Map config){
         ])
     }
     stages {
-        agent {
-            kubernetes {
-                yamlFile 'build-pod.yaml'
-            }
-        }
+
         stage('Checkout') {
             steps{
                 checkoutStage(config)
