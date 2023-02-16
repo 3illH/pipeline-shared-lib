@@ -2,11 +2,8 @@ def call(Map config){
     def FAILED_STAGE
     pipeline {
 
-    agent {
-        kubernetes {
-            yamlFile 'build-pod.yaml'
-        }
-    }
+    agent none
+
     environment {
         MAVEN_OPTS = "-Dmaven.repo.local=/m2"
         // DOCKERHUB_CREDENTIALS=credentials('dockerCredentials')
@@ -20,6 +17,11 @@ def call(Map config){
         ])
     }
     stages {
+        agent {
+            kubernetes {
+                yamlFile 'build-pod.yaml'
+            }
+        }
         stage('Checkout') {
             steps{
                 checkoutStage(config)
@@ -102,19 +104,19 @@ def call(Map config){
         // }
 
 
-        stage('Push with Docker to Harbor') {
-            when { expression { return config.steps.contains("dockerPush") } }
-            steps {
-                container('docker') {
-                    withCredentials([usernamePassword(credentialsId: 'harborCredentials', passwordVariable: 'harborPSW', usernameVariable: 'harborUser')]) {
-                        script{
-                            sh 'docker login core.harbor.domain -u $harborUser --password $harborPSW'
-                            sh "docker push ${dockerImageName}"
-                        }
-                    }
-                }
-            }
-        }
+        // stage('Push with Docker to Harbor') {
+        //     when { expression { return config.steps.contains("dockerPush") } }
+        //     steps {
+        //         container('docker') {
+        //             withCredentials([usernamePassword(credentialsId: 'harborCredentials', passwordVariable: 'harborPSW', usernameVariable: 'harborUser')]) {
+        //                 script{
+        //                     sh 'docker login core.harbor.domain -u $harborUser --password $harborPSW'
+        //                     sh "docker push ${dockerImageName}"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // if(config.steps.contains("argocd")){
         //     stage('Deploy with ArgoCd') {
@@ -130,6 +132,22 @@ def call(Map config){
         //         }
         //     }
         // }
+    }
+    stages {
+        stage('input') {
+        agent any
+        input {
+            message "Deploy in prod?"
+            ok "Submit"
+        }
+        steps {
+            echo "Good Morning, $FIRST_NAME"
+            sh '''
+            hostname
+            cat /etc/redhat-release
+            '''
+        }
+        }
     }
     post {
         always {
